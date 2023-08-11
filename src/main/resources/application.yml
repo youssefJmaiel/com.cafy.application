@@ -1,0 +1,47 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: cofe
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/cofe_database
+    username: youssef
+    password: youssef
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  zipkin:
+    base-url: http://localhost:9411
+  rabbitmq:
+    addresses: localhost:5672
+  profiles:
+    active: default
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
+
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: ibleachyou1@gmail.com
+  password: mpjmtwmbuglugfdo
+  properties:
+    mail:
+      smtp:
+        ssl:
+          trust: "*"
+        auth: true
+        starttls:
+          enable: true
