@@ -7,6 +7,10 @@ import com.cafy.application.entity.User;
 import com.cafy.application.jwt.CustomerUserDetailsService;
 import com.cafy.application.jwt.JwtFilter;
 import com.cafy.application.jwt.JwtUtils;
+import com.cafy.application.request.UserConverter;
+import com.cafy.application.request.UserDto;
+import com.cafy.application.request.UserRequest;
+import com.cafy.application.request.UserRequestConverter;
 import com.cafy.application.service.UserService;
 import com.cafy.application.utils.CofeUtils;
 import com.cafy.application.wrapper.EmailUtils;
@@ -14,18 +18,15 @@ import com.cafy.application.wrapper.UserWrapper;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -218,6 +219,21 @@ public class UserServiceImpl implements UserService {
             ex.printStackTrace();
         }
         return CofeUtils.getResponseEntity(CofeConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    @Override
+    public ResponseEntity<UserDto> create(UserRequest ownerRequest) {
+        User owner = UserRequestConverter.newInstance().convert(ownerRequest);
+        User savedOwner = userDao.save(owner);
+        return new  ResponseEntity<>(UserConverter.newInstance().convert(savedOwner),HttpStatus.OK);
+    }
+
+    @Override
+    public List<UserDto> getAll() {
+       List<User> owners = userDao.findAll();
+        List<UserDto> ownerDtos = owners.stream().map(owner -> UserConverter.newInstance().convert(owner)).collect(Collectors.toList());
+        return ownerDtos;
     }
 
 //    @Override

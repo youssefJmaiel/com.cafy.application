@@ -1,6 +1,8 @@
 package com.cafy.application.rest;
 
 import com.cafy.application.entity.User;
+import com.cafy.application.request.UserDto;
+import com.cafy.application.request.UserRequest;
 import com.cafy.application.wrapper.UserWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +47,12 @@ public interface UserRest {
 
     @PostMapping("/deleteUser/{id}")
     ResponseEntity<String> deleteUser(@PathVariable Integer id);
+
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE, path = "/v1/createOwners")
+    public ResponseEntity<UserDto> create( @RequestBody UserRequest ownerRequest);
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/v1/owners")
+    public List<UserDto> getAll();
 
 
 }
