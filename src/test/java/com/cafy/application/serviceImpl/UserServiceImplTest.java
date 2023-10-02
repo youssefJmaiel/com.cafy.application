@@ -76,7 +76,7 @@ class UserServiceImplTest {
                 .password("1234566")
                 .status("false")
                 .build();
-        ResponseEntity<UserDto> saveUser = userService.create(userRequest);
+        UserDto saveUser = userService.create(userRequest);
         log.info("user has been created");
         Assertions.assertNotNull(saveUser);
         System.out.println(saveUser);

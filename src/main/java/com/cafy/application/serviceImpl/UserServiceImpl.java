@@ -18,6 +18,10 @@ import com.cafy.application.wrapper.UserWrapper;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+//import org.springframework.hateoas.PagedResources;
+//import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -223,10 +227,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public ResponseEntity<UserDto> create(UserRequest ownerRequest) {
+    public UserDto create(UserRequest ownerRequest) {
         User owner = UserRequestConverter.newInstance().convert(ownerRequest);
         User savedOwner = userDao.save(owner);
-        return new  ResponseEntity<>(UserConverter.newInstance().convert(savedOwner),HttpStatus.OK);
+        return UserConverter.newInstance().convert(savedOwner);
     }
 
     @Override
@@ -235,6 +239,8 @@ public class UserServiceImpl implements UserService {
         List<UserDto> ownerDtos = owners.stream().map(owner -> UserConverter.newInstance().convert(owner)).collect(Collectors.toList());
         return ownerDtos;
     }
+
+
 
 //    @Override
 //    public ResponseEntity<List<UserWrapper>> getUsersFilterApi(String name, String email, String contactNumber, Pageable pageable) {

@@ -7,10 +7,11 @@ import com.cafy.application.wrapper.UserWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedResourcesAssembler;
+//import org.springframework.hateoas.PagedResources;
+//import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -38,9 +39,11 @@ public interface UserService {
 
     ResponseEntity<String> deleteUser(Integer id);
 
-    public ResponseEntity<UserDto> create( @RequestBody UserRequest userRequest);
+    public UserDto create( @RequestBody UserRequest userRequest);
 
     public List<UserDto> getAll();
+
+
 
 
 }

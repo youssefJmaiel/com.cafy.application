@@ -10,7 +10,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+//import org.springframework.hateoas.Resource;
+//import org.springframework.hateoas.PagedResources;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +50,17 @@ public interface UserRest {
     ResponseEntity<String> deleteUser(@PathVariable Integer id);
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE, path = "/v1/createOwners")
-    public ResponseEntity<UserDto> create( @RequestBody UserRequest ownerRequest);
+    public UserDto create( @RequestBody UserRequest ownerRequest);
 
     @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/v1/owners")
     public List<UserDto> getAll();
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE, path = "/v1/users/searchFullText")
+    public Page<UserDto> getUsers(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "contactNumber", required = false) String contactNumber,
+            @RequestParam(value = "email", required = false) String email,
+            Pageable pageable, PagedResourcesAssembler<UserDto> assembler );
 
 
 }

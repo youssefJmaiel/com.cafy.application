@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedResourcesAssembler;
+//import org.springframework.hateoas.PagedResources;
+//import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.Resource;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -149,10 +152,10 @@ public class UserRestImpl implements UserRest {
     }
 
     @Override
-    public ResponseEntity<UserDto> create(UserRequest ownerRequest) {
-        UserDto ownerDto = userService.create(ownerRequest).getBody();
+    public UserDto create(UserRequest ownerRequest) {
+        UserDto ownerDto = userService.create(ownerRequest);
         final URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/api/v1/owners/{id}").build().expand(ownerDto.getId()).toUri();
-        return ResponseEntity.created(location).body(ownerDto);
+        return ownerDto;
     }
 
 
@@ -163,6 +166,21 @@ public class UserRestImpl implements UserRest {
         List<UserDto> ownerDtos = owners.stream().map(owner -> UserConverter.newInstance().convert(owner)).collect(Collectors.toList());
         return ownerDtos;
     }
+
+    @Override
+    public Page<UserDto> getUsers(String name, String contactNumber, String email, Pageable pageable, PagedResourcesAssembler<UserDto> assembler) {
+        Specification<User> userSpecification = Specification.where(UserSpecification.perSearch(name, email, contactNumber));
+        Page<User> all = userDao.findAll(userSpecification, pageable);
+        return all.map(UserConverter.newInstance()::convert);
+    }
+
+//    @Override
+//    public ResponseEntity<PagedResources<Resource<UserDto>>> getCooptations(String name, String contactNumber, String email, Pageable pageable, PagedResourcesAssembler<UserDto> assembler) {
+//        Specification<User> userSpecification = Specification.where(UserSpecification.perSearch( name, email, contactNumber));
+//        Page<User> all = userDao.findAll(userSpecification, pageable);
+//        return  all.map(UserConverter.newInstance()::convert);
+//    }
+
 
 
 
