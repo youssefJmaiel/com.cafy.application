@@ -4,10 +4,10 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-- DELL
+- master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: DELL
 
 steps:
 - task: Maven@3
